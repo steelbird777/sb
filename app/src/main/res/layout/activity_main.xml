@@ -5,12 +5,11 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@mipmap/app_back"
     android:padding="16dp"
     tools:context=".MainActivity">
 
     <ImageView
-        android:id="@+id/"
+        android:id="@+id/closebtn"
         android:layout_width="43dp"
         android:layout_height="38dp"
         android:src="@drawable/close" />
@@ -97,15 +96,38 @@
 
     <Button
         android:id="@+id/loginButton"
-        android:layout_width="120dp"
-        android:layout_height="59dp"
+        android:layout_width="126dp"
+        android:layout_height="66dp"
         android:layout_below="@+id/passwordInputLayout"
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true"
-        android:layout_marginStart="146dp"
-        android:layout_marginTop="44dp"
-        android:layout_marginEnd="129dp"
+        android:layout_marginStart="136dp"
+        android:layout_marginTop="43dp"
+        android:layout_marginEnd="133dp"
+        android:onClick="onLoginButtonClick"
         android:text="Login"
         android:textColor="@color/black" />
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="146dp"
+        android:layout_marginTop="326dp"
+        android:layout_marginEnd="174dp"
+        android:layout_marginBottom="309dp"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.463" />
+
 
 </RelativeLayout>

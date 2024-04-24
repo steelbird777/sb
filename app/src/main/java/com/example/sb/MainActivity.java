@@ -1,28 +1,92 @@
 package com.example.sb;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ProgressBar;
+import android.widget.Toast;
 
-
-import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
 
 public class MainActivity extends AppCompatActivity {
 
+    FirebaseAuth mAuth;
+    private Button loginbtn;
+    private EditText memail;
+    private EditText mpassword;
+    private ProgressBar mprogressBar;
+    private Button adminbtn;
+    private View closeBtn;
+
+    @SuppressLint({"MissingInflatedId", "WrongViewCast"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
+        mAuth = FirebaseAuth.getInstance();
+        loginbtn = findViewById(R.id.loginButton);
+        memail = findViewById(R.id.emailEditText);
+        mpassword = findViewById(R.id.passwordEditText);
+        mprogressBar = findViewById(R.id.progressBar);
+        closeBtn = findViewById(R.id.closebtn);
+        closeBtn.setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        finishAffinity();
+                    }
+                }
+        );
+        loginbtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String email = memail.getText().toString().trim();
+                String password = mpassword.getText().toString().trim();
+
+                if (email.isEmpty() || password.isEmpty()) {
+                    Toast.makeText(MainActivity.this,"Please fill all the fields",Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                mprogressBar.setVisibility(View.VISIBLE);
+                loginbtn.setEnabled(false);
+                mAuth.signInWithEmailAndPassword(email, password)
+                        .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                            @Override
+                            public void onComplete(@NonNull Task<AuthResult> task) {
+
+                                mprogressBar.setVisibility(View.INVISIBLE);
+                                loginbtn.setEnabled(true);
+                                if (task.isSuccessful()) {
+                                    memail.setText("");
+                                    mpassword.setText("");
+                                    Toast.makeText(MainActivity.this,"Authentication Success",Toast.LENGTH_SHORT).show();
+                                    Intent intent = new Intent(MainActivity.this, SubjectsActivity.class);
+                                    startActivity(intent);
+                                }else{
+                                    Toast.makeText(MainActivity.this,"Authentication Failed",Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        });
+            }
         });
+
     }
+    @Override
+    public void onBackPressed(){
+        super.onBackPressed();
+        finishAffinity();
+    }
+
 }
+
+
