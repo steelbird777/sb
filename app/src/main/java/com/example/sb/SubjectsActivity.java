@@ -1,5 +1,6 @@
 package com.example.sb;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -36,6 +37,7 @@ public class SubjectsActivity extends AppCompatActivity {
     private SubjectAdapter subjectAdapter;
     private FirebaseAuth mAuth;
     private ProgressBar progressBar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,20 +60,26 @@ public class SubjectsActivity extends AppCompatActivity {
         subjectRecyclerView = findViewById(R.id.subjectRecyclerView);
         subjectRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         String userEmail = Objects.requireNonNull(mAuth.getCurrentUser()).getEmail();
-        fetchSubjects(userEmail);
+        fetchSubjects();
     }
-    public void fetchSubjects(String userEmail) {
-        db.collection("subject")
-                .whereEqualTo("user_mail", userEmail)
+
+    public void fetchSubjects() {
+        db.collection("user_video")
                 .get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         List<String> subject_ids = new ArrayList<>();
                         for (QueryDocumentSnapshot document : Objects.requireNonNull(task.getResult())) {
-                            String subject_id= document.getString("subject_id");
+                            String subject_id = document.getString("subject_id");
                             subject_ids.add(subject_id);
                         }
-                        fetchSubjectDetails(subject_ids);
+                        if (subject_ids.isEmpty()) {
+                            // Handle the case where no subject IDs are fetched
+                            Log.e(TAG, "No subject IDs fetched");
+                            Toast.makeText(SubjectsActivity.this, "No subjects available", Toast.LENGTH_SHORT).show();
+                        } else {
+                            fetchSubjectDetails(subject_ids);
+                        }
                     } else {
                         Log.e(TAG, "Error fetching subjects: ", task.getException());
                         Toast.makeText(SubjectsActivity.this, "Error fetching subjects", Toast.LENGTH_SHORT).show();
@@ -79,17 +87,27 @@ public class SubjectsActivity extends AppCompatActivity {
                     progressBar.setVisibility(View.INVISIBLE);
                 });
     }
+
+
     public void fetchSubjectDetails(List<String> subject_ids) {
+        if (subject_ids.isEmpty()) {
+            Log.e(TAG, "No subject IDs to fetch details for");
+            // You might want to handle this case, such as showing a message to the user
+            return;
+        }
         progressBar.setVisibility(View.INVISIBLE);
-        db.collection("subject").get()
+        db.collection("user_video")
+                .whereIn("subject_id", subject_ids)
+                .get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         List<Subject> subjects = new ArrayList<>();
                         for (DocumentSnapshot document : task.getResult().getDocuments()) {
-                            Subject subject = document.toObject(Subject.class);
-                            if (subject != null) {
-                                subjects.add(subject);
-                            }
+                            // Retrieve subject details from the DocumentSnapshot
+                            String subject_name = document.getString("subject_name");
+                            String subject_id = document.getId();
+                            Subject subject = new Subject(subject_id, subject_name);
+                            subjects.add(subject);
                         }
                         updateRecyclerView(subjects);
                     } else {
@@ -99,11 +117,13 @@ public class SubjectsActivity extends AppCompatActivity {
                     progressBar.setVisibility(View.INVISIBLE);
                 });
     }
+
     public void updateRecyclerView(List<Subject> subjects) {
-        subjectAdapter = new SubjectsActivity.SubjectAdapter(subjects);
+        subjectAdapter = new SubjectAdapter(subjects);
         subjectRecyclerView.setAdapter(subjectAdapter);
     }
-    public static class SubjectAdapter extends RecyclerView.Adapter<SubjectsActivity.SubjectAdapter.SubjectViewHolder> {
+
+    public static class SubjectAdapter extends RecyclerView.Adapter<SubjectAdapter.SubjectViewHolder> {
         private List<Subject> subjects;
 
         public SubjectAdapter(List<Subject> subjects) {
@@ -112,13 +132,13 @@ public class SubjectsActivity extends AppCompatActivity {
 
         @NonNull
         @Override
-        public SubjectsActivity.SubjectAdapter.SubjectViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        public SubjectViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
             View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.subject_card, parent, false);
-            return new SubjectsActivity.SubjectAdapter.SubjectViewHolder(view);
+            return new SubjectViewHolder(view);
         }
 
         @Override
-        public void onBindViewHolder(@NonNull SubjectsActivity.SubjectAdapter.SubjectViewHolder holder, int position) {
+        public void onBindViewHolder(@NonNull SubjectViewHolder holder, int position) {
             holder.bind(subjects.get(position));
         }
 
@@ -129,8 +149,6 @@ public class SubjectsActivity extends AppCompatActivity {
 
         public static class SubjectViewHolder extends RecyclerView.ViewHolder {
             private TextView subject_name;
-            private TextView subject_id;
-
 
             public SubjectViewHolder(@NonNull View itemView) {
                 super(itemView);
@@ -139,6 +157,24 @@ public class SubjectsActivity extends AppCompatActivity {
 
             public void bind(Subject subject) {
                 subject_name.setText(subject.getSubject_name());
+                itemView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        // Determine which subject was clicked
+                        String subjectName = subject.getSubject_name();
+                        if (subjectName.equals("Maths")) {
+                            // Start MathsActivity
+                            Context context = itemView.getContext();
+                            Intent intent = new Intent(context, MathsActivity.class);
+                            context.startActivity(intent);
+                        } else if (subjectName.equals("Science")) {
+                            // Start ScienceActivity
+                            Context context = itemView.getContext();
+                            Intent intent = new Intent(context, ScienceActivity.class);
+                            context.startActivity(intent);
+                        }
+                    }
+                });
             }
         }
     }
