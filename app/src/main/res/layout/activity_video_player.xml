@@ -5,14 +5,16 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MathsActivity">
+    tools:context=".VideoPlayerActivity">
 
-    <VideoView
+    <com.google.android.exoplayer2.ui.PlayerView
         android:id="@+id/video_player"
         android:layout_width="match_parent"
         android:layout_height="248dp"
         app:layout_constraintTop_toTopOf="parent"
-        tools:layout_editor_absoluteX="3dp" />
+        tools:layout_editor_absoluteX="3dp"
+        app:resize_mode="fill"
+        app:use_controller="true" />
 
     <FrameLayout
         android:id="@+id/full_screen_container"

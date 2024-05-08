@@ -6,7 +6,7 @@ public class Video {
     private String video_number;
     private String video_name;
     private String video_content;
-    private String video_link;
+    private String video;
 
     public Video() {
         // Required empty public constructor for Firestore
@@ -16,7 +16,7 @@ public class Video {
         this.video_number = video_number;
         this.video_name = video_name;
         this.video_content = video_content;
-        this.video_link = video_link;
+        this.video = video;
 
     }
 
@@ -45,10 +45,10 @@ public class Video {
     }
 
     public String getVideo() {
-        return video_link;
+        return video;
     }
     public void setVideoURI(String video) {
-        this.video_link = video_link;
+        this.video = video;
     }
 
 

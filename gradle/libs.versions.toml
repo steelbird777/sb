@@ -10,6 +10,8 @@ constraintlayout = "2.1.4"
 googleServices = "4.4.1"
 firebaseMessaging = "23.4.1"
 youtubeAndroidPlayer = "10.0.5"
+media3Common = "1.3.1"
+media3Ui = "1.3.1"
 
 [libraries]
 junit = { group = "junit", name = "junit", version.ref = "junit" }
@@ -22,6 +24,8 @@ constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayo
 google-services = { group = "com.google.gms", name = "google-services", version.ref = "googleServices" }
 firebase-messaging = { group = "com.google.firebase", name = "firebase-messaging", version.ref = "firebaseMessaging" }
 youtube-android-player = { module = "com.google.android.youtube:youtube-android-player", version.ref = "youtubeAndroidPlayer" }
+media3-common = { group = "androidx.media3", name = "media3-common", version.ref = "media3Common" }
+media3-ui = { group = "androidx.media3", name = "media3-ui", version.ref = "media3Ui" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
