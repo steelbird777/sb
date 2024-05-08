@@ -1,9 +1,7 @@
 package com.example.sb;
 
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -23,6 +21,7 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -36,8 +35,8 @@ public class SubjectsActivity extends AppCompatActivity {
     private RecyclerView subjectRecyclerView;
     private FirebaseFirestore db;
     private SubjectAdapter subjectAdapter;
+    private FirebaseAuth mAuth;
     private ProgressBar progressBar;
-    private Button enrollsBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,8 +56,10 @@ public class SubjectsActivity extends AppCompatActivity {
             startActivity(intent);
         });
         db = FirebaseFirestore.getInstance();
+        mAuth = FirebaseAuth.getInstance();
         subjectRecyclerView = findViewById(R.id.subjectRecyclerView);
         subjectRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        String userEmail = Objects.requireNonNull(mAuth.getCurrentUser()).getEmail();
         fetchSubjects();
     }
 
@@ -124,7 +125,6 @@ public class SubjectsActivity extends AppCompatActivity {
 
     public static class SubjectAdapter extends RecyclerView.Adapter<SubjectAdapter.SubjectViewHolder> {
         private List<Subject> subjects;
-        private Context mContext;
 
         public SubjectAdapter(List<Subject> subjects) {
             this.subjects = subjects;
@@ -137,39 +137,10 @@ public class SubjectsActivity extends AppCompatActivity {
             return new SubjectViewHolder(view);
         }
 
-        // Inside the onBindViewHolder method of SubjectAdapter
         @Override
         public void onBindViewHolder(@NonNull SubjectViewHolder holder, int position) {
             holder.bind(subjects.get(position));
-
-            holder.enrollsBtn.setOnClickListener(view -> {
-                Subject subject = subjects.get(position);
-
-                // Get user ID (you can get it from mAuth)
-                String userId = ""; // Get the user ID here
-
-                // Get current date (you can format it as needed)
-                String enrollDate = ""; // Get the current date here
-
-                // Insert data into the database
-                EnrollsDbHelper dbHelper = new EnrollsDbHelper(view.getContext());
-                SQLiteDatabase db = dbHelper.getWritableDatabase();
-
-                ContentValues values = new ContentValues();
-                values.put(EnrollsContract.EnrollmentEntry.COLUMN_NAME_USER_ID, userId);
-                values.put(EnrollsContract.EnrollmentEntry.COLUMN_NAME_SUBJECT_ID, subject.getSubject_id());
-                values.put(EnrollsContract.EnrollmentEntry.COLUMN_NAME_SUBJECT_NAME, subject.getSubject_name());
-                values.put(EnrollsContract.EnrollmentEntry.COLUMN_NAME_ENROLL_DATE, enrollDate);
-
-                long newRowId = db.insert(EnrollsContract.EnrollmentEntry.TABLE_NAME, null, values);
-                if (newRowId != -1) {
-                    Toast.makeText(view.getContext(), "Enrolled successfully", Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(view.getContext(), "Failed to enroll", Toast.LENGTH_SHORT).show();
-                }
-            });
         }
-
 
         @Override
         public int getItemCount() {
@@ -178,17 +149,15 @@ public class SubjectsActivity extends AppCompatActivity {
 
         public static class SubjectViewHolder extends RecyclerView.ViewHolder {
             private TextView subject_name;
-            private Button enrollsBtn;
 
             public SubjectViewHolder(@NonNull View itemView) {
                 super(itemView);
                 subject_name = itemView.findViewById(R.id.subject_name);
-                enrollsBtn = itemView.findViewById(R.id.enroll_button);
             }
 
             public void bind(Subject subject) {
                 subject_name.setText(subject.getSubject_name());
-                enrollsBtn.setOnClickListener(new View.OnClickListener() {
+                itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         // Determine which subject was clicked
@@ -201,7 +170,7 @@ public class SubjectsActivity extends AppCompatActivity {
                         } else if (subjectName.equals("Science")) {
                             // Start ScienceActivity
                             Context context = itemView.getContext();
-                            Intent intent = new Intent(context, VideoPlayerActivity.class);
+                            Intent intent = new Intent(context, ScienceActivity.class);
                             context.startActivity(intent);
                         }
                     }
