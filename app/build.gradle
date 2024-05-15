@@ -55,7 +55,8 @@ dependencies {
     implementation 'com.google.api-client:google-api-client-android:1.30.10'
     implementation 'com.squareup.picasso:picasso:2.8'
     implementation 'com.pierfrancescosoffritti.androidyoutubeplayer:core:11.0.1'
-implementation libs.firebase.messaging
+    implementation("com.google.firebase:firebase-messaging")
+    implementation libs.firebase.messaging
     testImplementation libs.junit
     androidTestImplementation libs.ext.junit
     androidTestImplementation libs.espresso.core

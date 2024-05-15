@@ -37,6 +37,7 @@ public class SubjectsActivity extends AppCompatActivity {
     private SubjectAdapter subjectAdapter;
     private FirebaseAuth mAuth;
     private ProgressBar progressBar;
+    private Button enrollsBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -149,26 +150,30 @@ public class SubjectsActivity extends AppCompatActivity {
 
         public static class SubjectViewHolder extends RecyclerView.ViewHolder {
             private TextView subject_name;
+            private Button enrollsBtn;
 
             public SubjectViewHolder(@NonNull View itemView) {
                 super(itemView);
                 subject_name = itemView.findViewById(R.id.subject_name);
+                enrollsBtn = itemView.findViewById(R.id.enrollBtn);
             }
 
             public void bind(Subject subject) {
                 subject_name.setText(subject.getSubject_name());
-                itemView.setOnClickListener(new View.OnClickListener() {
+                enrollsBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        // Use itemView.getContext() instead of this
+                        NotificationHelper.createNotificationChannel(itemView.getContext()); // Call this in onCreate or wherever appropriate
+                        NotificationHelper.showNotification(itemView.getContext(), "Welcome message"); // Call this wherever you want to show a notification
+
                         // Determine which subject was clicked
                         String subjectName = subject.getSubject_name();
                         if (subjectName.equals("Maths")) {
-                            // Start MathsActivity
                             Context context = itemView.getContext();
                             Intent intent = new Intent(context, MathsActivity.class);
                             context.startActivity(intent);
                         } else if (subjectName.equals("Science")) {
-                            // Start ScienceActivity
                             Context context = itemView.getContext();
                             Intent intent = new Intent(context, ScienceActivity.class);
                             context.startActivity(intent);
@@ -176,6 +181,7 @@ public class SubjectsActivity extends AppCompatActivity {
                     }
                 });
             }
+
         }
     }
 }
