@@ -171,13 +171,17 @@ public class SubjectsActivity extends AppCompatActivity {
                         String subjectName = subject.getSubject_name();
                         if (subjectName.equals("Maths")) {
                             Context context = itemView.getContext();
-                            Intent intent = new Intent(context, MathsActivity.class);
+                            Intent intent = new Intent(context, YoutubeActivity.class);
                             context.startActivity(intent);
                         } else if (subjectName.equals("Science")) {
                             Context context = itemView.getContext();
                             Intent intent = new Intent(context, ScienceActivity.class);
                             context.startActivity(intent);
-                        }
+                        } else if (subjectName.equals("Video")) {
+                        Context context = itemView.getContext();
+                        Intent intent = new Intent(context, MathsActivity.class);
+                        context.startActivity(intent);
+                    }
                     }
                 });
             }
