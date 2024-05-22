@@ -133,5 +133,14 @@
         </com.google.android.material.card.MaterialCardView>
 
     </LinearLayout>
-
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/party"
+        android:layout_width="395dp"
+        android:layout_height="715dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:lottie_autoPlay=""
+        app:lottie_loop="false"
+        app:lottie_rawRes="@raw/party" />
 </androidx.constraintlayout.widget.ConstraintLayout>

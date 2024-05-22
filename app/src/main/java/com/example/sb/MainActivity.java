@@ -31,6 +31,8 @@ public class MainActivity extends AppCompatActivity {
     private View adminbtn;
     private View closeBtn;
 
+
+
     @SuppressLint({"MissingInflatedId", "WrongViewCast"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,6 +84,7 @@ public class MainActivity extends AppCompatActivity {
                                 mprogressBar.setVisibility(View.INVISIBLE);
                                 loginbtn.setEnabled(true);
                                 if (task.isSuccessful()) {
+
                                     memail.setText("");
                                     mpassword.setText("");
                                     Toast.makeText(MainActivity.this,"Authentication Success",Toast.LENGTH_SHORT).show();
