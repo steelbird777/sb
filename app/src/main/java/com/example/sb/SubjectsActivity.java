@@ -21,6 +21,7 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.appbar.MaterialToolbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -38,6 +39,7 @@ public class SubjectsActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private ProgressBar progressBar;
     private Button enrollsBtn;
+    private View backBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,22 +52,29 @@ public class SubjectsActivity extends AppCompatActivity {
             return insets;
         });
         progressBar = findViewById(R.id.progressBar);
-        Button backBtn = findViewById(R.id.back_btn);
-        backBtn.setOnClickListener(view -> {
-            Toast.makeText(SubjectsActivity.this, "Logged out Successfully", Toast.LENGTH_SHORT).show();
-            Intent intent = new Intent(SubjectsActivity.this, MainActivity.class);
-            startActivity(intent);
-        });
         db = FirebaseFirestore.getInstance();
         mAuth = FirebaseAuth.getInstance();
         subjectRecyclerView = findViewById(R.id.subjectRecyclerView);
         subjectRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         String userEmail = Objects.requireNonNull(mAuth.getCurrentUser()).getEmail();
-        fetchSubjects();
+        fetchSubjects(userEmail);
+
+
+        MaterialToolbar toolbar = findViewById(R.id.toolbar);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent= new Intent(SubjectsActivity.this, MainActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        });
+
     }
 
-    public void fetchSubjects() {
+    public void fetchSubjects(String userEmail) {
         db.collection("user_video")
+                .whereEqualTo("user_mail",userEmail)
                 .get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
@@ -169,23 +178,27 @@ public class SubjectsActivity extends AppCompatActivity {
 
                         // Determine which subject was clicked
                         String subjectName = subject.getSubject_name();
-                        if (subjectName.equals("Maths")) {
-                            Context context = itemView.getContext();
-                            Intent intent = new Intent(context, YoutubeActivity.class);
-                            context.startActivity(intent);
-                        } else if (subjectName.equals("Science")) {
-                            Context context = itemView.getContext();
-                            Intent intent = new Intent(context, ScienceActivity.class);
-                            context.startActivity(intent);
-                        } else if (subjectName.equals("Video")) {
+                        String activityName = subjectName + "Activity";
                         Context context = itemView.getContext();
-                        Intent intent = new Intent(context, MathsActivity.class);
-                        context.startActivity(intent);
-                    }
+
+                        try {
+                            // Get the full class name by including the package name
+                            Class<?> activityClass = Class.forName(context.getPackageName() + "." + activityName);
+                            Intent intent = new Intent(context, activityClass);
+                            context.startActivity(intent);
+                        } catch (ClassNotFoundException e) {
+                            e.printStackTrace();
+                            // Handle the exception (e.g., show a toast or log an error)
+                            // For example, you can log the error or show a message to the user
+                            Toast.makeText(context, "Activity not found", Toast.LENGTH_SHORT).show();
+                        }
+
+
                     }
                 });
             }
 
         }
+
     }
 }

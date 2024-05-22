@@ -6,7 +6,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -21,6 +20,7 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.appbar.MaterialToolbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -52,9 +52,10 @@ public class VideoActivity extends AppCompatActivity {
             return insets;
         });
         progressBar = findViewById(R.id.progressBar);
-        Button backBtn = findViewById(R.id.back_btn);
-        backBtn.setOnClickListener(view -> {
-            Toast.makeText(VideoActivity.this, "Logged out Successfully", Toast.LENGTH_SHORT).show();
+
+        MaterialToolbar toolbar = findViewById(R.id.toolbar);
+
+        toolbar.setNavigationOnClickListener(view -> {
             Intent intent = new Intent(VideoActivity.this, SubjectsActivity.class);
             startActivity(intent);
         });
@@ -148,14 +149,13 @@ public class VideoActivity extends AppCompatActivity {
                 video_number = itemView.findViewById(R.id.video_number);
                 video_name = itemView.findViewById(R.id.video_name);
                 video_content = itemView.findViewById(R.id.video_content);
-                videoImg = itemView.findViewById(R.id.videoImg);
+                 videoImg = itemView.findViewById(R.id.videoImg);
             }
 
             public void bind(Video video) {
                 video_number.setText(video.getVideo_number());
                 video_name.setText(video.getVideo_name());
                 video_content.setText(video.getVideo_content());
-
             }
         }
     }

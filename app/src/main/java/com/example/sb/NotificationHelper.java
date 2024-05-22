@@ -13,7 +13,7 @@ public class NotificationHelper {
     public static void createNotificationChannel(Context context) {
         NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            NotificationChannel channel = new NotificationChannel(NOTIFICATION_CHANNEL_ID, "Welcome Message", NotificationManager.IMPORTANCE_DEFAULT);
+            NotificationChannel channel = new NotificationChannel(NOTIFICATION_CHANNEL_ID, "Want to shine brightly?", NotificationManager.IMPORTANCE_DEFAULT);
             notificationManager.createNotificationChannel(channel);
         }
     }
@@ -23,7 +23,7 @@ public class NotificationHelper {
         Notification notification = null;
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
             notification = new Notification.Builder(context, NOTIFICATION_CHANNEL_ID)
-                    .setContentTitle("Welcome Message")
+                    .setContentTitle("Want to shine brightly?")
                     .setContentText(message)
                     .setSmallIcon(android.R.drawable.ic_dialog_info) // Use a default system icon
                     .build();

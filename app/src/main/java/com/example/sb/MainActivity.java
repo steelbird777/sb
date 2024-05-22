@@ -28,7 +28,7 @@ public class MainActivity extends AppCompatActivity {
     private EditText memail;
     private EditText mpassword;
     private ProgressBar mprogressBar;
-    private Button adminbtn;
+    private View adminbtn;
     private View closeBtn;
 
     @SuppressLint({"MissingInflatedId", "WrongViewCast"})
@@ -39,9 +39,19 @@ public class MainActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         loginbtn = findViewById(R.id.loginButton);
         memail = findViewById(R.id.emailEditText);
+        closeBtn = findViewById(R.id.closebtn);
         mpassword = findViewById(R.id.passwordEditText);
         mprogressBar = findViewById(R.id.progressBar);
-        closeBtn = findViewById(R.id.closebtn);
+        adminbtn = findViewById(R.id.adminBtn);
+        adminbtn.setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(MainActivity.this, AdminActivity.class);
+                        startActivity(intent);
+                    }
+                }
+        );
         closeBtn.setOnClickListener(
                 new View.OnClickListener() {
                     @Override
@@ -50,6 +60,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
         );
+
         loginbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -110,6 +121,9 @@ public class MainActivity extends AppCompatActivity {
         super.onBackPressed();
         finishAffinity();
     }
+
+
+
 }
 
 
