@@ -20,7 +20,7 @@ import javax.mail.internet.MimeMessage;
 public class EmailUtil {
 
     private static final String EMAIL = "sharonsofi777@gmail.com";
-    private static final String PASSWORD = "xsak dxqn sxvd mqya";
+    private static final String PASSWORD = "mbjjzaechzntbdra" ;
 
     public static void sendEmailIntent(Context context, String[] recipients, String subject, String body) {
         Intent emailIntent = new Intent(Intent.ACTION_SENDTO);

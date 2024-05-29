@@ -22,16 +22,14 @@ public class EmailActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 String email = emailEditText.getText().toString();
-                // Use the email as needed
                 sendEmail(email);
             }
         });
     }
 
     private void sendEmail(String email) {
-        // Example usage of EmailUtil to send an email in the background
         String subject = "New course material has arrived!";
-        String body = "Join us now on the live youtube video session at 6.00pm";
+        String body = "Join us now on the live YouTube video session at 6.00pm";
         EmailUtil.sendEmailInBackground(this, email, subject, body);
     }
 }

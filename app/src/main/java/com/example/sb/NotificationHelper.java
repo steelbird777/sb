@@ -25,7 +25,7 @@ public class NotificationHelper {
             notification = new Notification.Builder(context, NOTIFICATION_CHANNEL_ID)
                     .setContentTitle("Want to shine brightly?")
                     .setContentText(message)
-                    .setSmallIcon(android.R.drawable.ic_dialog_info) // Use a default system icon
+                    .setSmallIcon(android .R.drawable.ic_dialog_info) // Use a default system icon
                     .build();
         }
         notificationManager.notify(0, notification);
