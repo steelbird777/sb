@@ -23,6 +23,8 @@ public class SmsActivity extends AppCompatActivity {
     private EditText messageEditText;
     private Button sendSmsButton;
 
+    private View message;
+
     @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,7 +34,7 @@ public class SmsActivity extends AppCompatActivity {
         phoneNumberEditText = findViewById(R.id.phone_number_edit_text);
         messageEditText = findViewById(R.id.message_edit_text);
         sendSmsButton = findViewById(R.id.send_sms_button);
-
+        message = findViewById(R.id.message);
         sendSmsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

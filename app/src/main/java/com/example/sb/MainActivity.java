@@ -1,6 +1,5 @@
 package com.example.sb;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -8,6 +7,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -30,10 +30,12 @@ public class MainActivity extends AppCompatActivity {
     private ProgressBar mprogressBar;
     private View adminbtn;
     private View closeBtn;
+    private TextView signup;
+
+    private TextView forgot_password;
 
 
 
-    @SuppressLint({"MissingInflatedId", "WrongViewCast"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,8 +44,34 @@ public class MainActivity extends AppCompatActivity {
         loginbtn = findViewById(R.id.loginButton);
         memail = findViewById(R.id.emailEditText);
         closeBtn = findViewById(R.id.closebtn);
+        signup = findViewById(R.id.ssignup);
         mpassword = findViewById(R.id.passwordEditText);
         mprogressBar = findViewById(R.id.progressBar);
+        forgot_password = findViewById(R.id.forgot_password);
+        forgot_password.setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        String email = memail.getText().toString().trim();
+                        if (email.isEmpty()) {
+                            Toast.makeText(MainActivity.this, "Please enter your email", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+
+                        mAuth.sendPasswordResetEmail(email)
+                                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<Void> task) {
+                                        if (task.isSuccessful()) {
+                                            Toast.makeText(MainActivity.this, "Password reset email sent", Toast.LENGTH_SHORT).show();
+                                        } else {
+                                            Toast.makeText(MainActivity.this, "Error sending password reset email", Toast.LENGTH_SHORT).show();
+                                        }
+                                    }
+                                });
+                    }
+                });
+
         adminbtn = findViewById(R.id.adminBtn);
         adminbtn.setOnClickListener(
                 new View.OnClickListener() {
@@ -54,6 +82,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
         );
+
         closeBtn.setOnClickListener(
                 new View.OnClickListener() {
                     @Override
@@ -62,6 +91,13 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
         );
+        signup.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this,SignupActivity.class);
+                startActivity(intent);
+            }
+        });
 
         loginbtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -124,10 +160,4 @@ public class MainActivity extends AppCompatActivity {
         super.onBackPressed();
         finishAffinity();
     }
-
-
-
 }
-
-
-
