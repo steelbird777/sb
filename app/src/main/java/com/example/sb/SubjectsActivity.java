@@ -41,6 +41,7 @@ public class SubjectsActivity extends AppCompatActivity {
     private Button enrollsBtn;
     private View backBtn;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -108,6 +109,7 @@ public class SubjectsActivity extends AppCompatActivity {
         progressBar.setVisibility(View.INVISIBLE);
         db.collection("user_video")
                 .whereIn("subject_id", subject_ids)
+                .whereEqualTo("user_mail", mAuth.getCurrentUser().getEmail())
                 .get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
@@ -116,7 +118,8 @@ public class SubjectsActivity extends AppCompatActivity {
                             // Retrieve subject details from the DocumentSnapshot
                             String subject_name = document.getString("subject_name");
                             String subject_id = document.getId();
-                            Subject subject = new Subject(subject_id, subject_name);
+                            String user_mail = document.getString("user_mail");
+                            Subject subject = new Subject(subject_id, subject_name, user_mail);
                             subjects.add(subject);
                         }
                         updateRecyclerView(subjects);

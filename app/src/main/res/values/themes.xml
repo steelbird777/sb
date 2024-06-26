@@ -3,9 +3,18 @@
     <style name="Base.Theme.Sb" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your light theme here. -->
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
-        <item name = "colorPrimary">@color/purple</item>
-        <item name = "colorPrimaryVariant">@color/purple</item>
+        <item name="colorPrimary">@color/purple</item>
+        <item name="colorPrimaryVariant">@color/purple</item>
     </style>
 
     <style name="Theme.Sb" parent="Base.Theme.Sb" />
+
+    <style name="Theme.Sb.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="Theme.Sb.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="Theme.Sb.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 </resources>

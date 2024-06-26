@@ -76,6 +76,8 @@ public class SignupActivity extends AppCompatActivity {
                 String mpassword = password.getText().toString().trim();
                 String mcpassword = cpassword.getText().toString().trim();
 
+
+
                 if (memail.isEmpty()) {
                     Toast.makeText(SignupActivity.this, "Email cannot be empty", Toast.LENGTH_SHORT).show();
                     return;
@@ -86,6 +88,11 @@ public class SignupActivity extends AppCompatActivity {
                 }
                 if (!mpassword.equals(mcpassword)) {
                     Toast.makeText(SignupActivity.this, "Passwords are not matching", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                int mob = Integer.parseInt(mobile.getText().toString());
+                if (mob < 1000000000 || mob > 9999999999L) {
+                    Toast.makeText(SignupActivity.this, "Enter a valid mobile number", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
